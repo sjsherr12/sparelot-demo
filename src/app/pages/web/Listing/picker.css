@@ -1,0 +1,34 @@
+/* Remove global border from the Flatpickr calendar */
+.flatpickr-calendar {
+    border: none; /* Remove the border */
+    box-shadow: none; /* Remove any shadow that might create a border effect */
+    background-color: transparent; /* Optional: Set the background to transparent if needed */
+    font-family: 'Inter', sans-serif;
+}
+
+/* Remove border from each individual date cell if necessary */
+.flatpickr-day {
+    border: none; /* Remove any borders on the date cells */
+}
+.flatpickr-day:hover {
+    border: 1px solid #000;
+}
+
+.flatpickr-current-month .numInputWrapper input {
+    pointer-events: none; /* Prevents interaction */
+    background-color: transparent; /* Optional: Make the background transparent */
+    border: none; /* Optional: Remove the border */
+    font-weight: 550; /* Adjust the boldness for the year */
+}
+
+/* Make the month dropdown non-editable */
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+    pointer-events: none; /* Disables selecting from the dropdown */
+    background-color: transparent; /* Optional: Make the background transparent */
+    border: none; /* Optional: Remove the border */
+}
+
+/* Hide the input field that displays the date */
+.flatpickr-input {
+    display: none !important; /* Forcefully hide the input */
+}

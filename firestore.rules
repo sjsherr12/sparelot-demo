@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if true;
+      allow write, delete: if request.auth != null && request.auth.uid == userId;
+      match /notifications/{notification} {
+        allow read, write, delete: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+    
+    match /reviews/{review} {
+      allow read: if true;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.from;
+    }
+    
+    match /listings/{listing_id} {
+      allow read: if true;
+      allow write: if false;
+    }
+    
+    match /drafts/{draft_id} {
+      allow read, write, delete: if request.auth != null && request.auth.uid == resource.data.host;
+    }
+    
+    match /reservations/{reservation_id} {
+      allow read: if true;
+      allow write: if false;
+    }
+    
+    match /chats/{chat_id} {
+      // Only allow participants to read chat data
+      allow read: if request.auth != null && request.auth.uid in resource.data.participants;
+      allow create: if request.auth != null && request.auth.uid in request.resource.data.participants;
+      allow update: if request.auth != null && request.auth.uid in resource.data.participants;
+      
+      // Add rules for the messages subcollection
+      match /messages/{message_id} {
+        allow read: if request.auth != null && request.auth.uid in get(/databases/$(database)/documents/chats/$(chat_id)).data.participants;
+        allow create: if request.auth != null && request.auth.uid in get(/databases/$(database)/documents/chats/$(chat_id)).data.participants;
+        allow update: if request.auth != null && request.auth.uid in get(/databases/$(database)/documents/chats/$(chat_id)).data.participants;
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+#background-container {
+    width: 100%;
+    height: 'fit-content';
+    display: grid;
+    gap: 16px;
+  }
+  
+  .boxes {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: white;
+  }
+  a{
+    color: rgb(193, 227, 240);
+  }
+  .boxes h2{
+    margin-bottom: 6px;
+  }
+  #side-info{
+    color: white;
+    margin-bottom:16px;
+  }
+  
+  #footer-bottom{
+    margin-top: 10px;
+    height: 50px;
+  }
+  #footer-bottom h6{
+    color: white;
+    display: inline;
+    margin-right: 65px;
+  }
+  #footer-logo{
+    height: 55px;
+    width: auto;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  #side-info h2{
+    margin-top: 50px;
+    margin-bottom: 20px;
+  }

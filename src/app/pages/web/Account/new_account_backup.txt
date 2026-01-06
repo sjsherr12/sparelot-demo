@@ -1,0 +1,289 @@
+import Navbar from "app/sections/Navbar";
+import { home_actions } from "app/sections/Navbar/actions";
+import { home_mobile_routes } from "app/sections/Navbar/routes";
+import { home_web_routes } from "app/sections/Navbar/routes";
+import colors from "assets/theme/base/colors";
+import { Alert, Badge, Box, Container, Fade, IconButton, Slide, Typography, useMediaQuery } from "@mui/material";
+import * as c from 'const'
+import MKTypography from "components/MKTypography";
+import MKBox from "components/MKBox";
+import { useUserAuthState } from "app/backend/user/auth/reactprovider";
+import { useEffect, useState } from "react";
+import { makeAuthUserUsernameAbbreviated } from "app/utils/listings/utils";
+import DirectoryHeader from "./header";
+import WebWrapper from "app/utils/wrapper/web";
+import AccountProfile from "./Profile";
+import AccountPersonal from "./Personal";
+import AccountSecurity from "./Security";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { makeDateFormatted } from "app/utils/listings/utils";
+import { Avatar } from "@mui/material";
+import { Icon } from "@mui/material";
+import { getUser } from "app/backend/db/user";
+import { fontGrid } from "@mui/material/styles/cssUtils";
+import { sendEmailVerification } from "firebase/auth";
+import { Helmet } from "react-helmet-async";
+import { AnimatePresence, motion } from 'framer-motion'
+import AddIcon from '@mui/icons-material/Add';
+import MKButton from "components/MKButton";
+import account_web_routes from "./routes";
+import { Add, ArrowBackIosNewRounded, ArrowForwardIosRounded, Close, LogoutOutlined, MenuOpen } from "@mui/icons-material";
+import account_web_subroutes from "./subroutes";
+
+const swipeVariants = {
+    hidden: { x: "100%", opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { type: "tween", duration: .1 } },
+    exit: { x: "100%", opacity: 0, transition: { type: "tween", duration: .1 } },
+};
+
+const ParentLink = () => {
+    const location = useLocation();
+    
+    const pathSegments = location?.pathname.split("/").filter(Boolean);
+    const parentPath = pathSegments.length > 1 ? `/${pathSegments.slice(0, -1).join("/")}` : "/";
+
+    return (
+        <IconButton
+            component={Link}
+            to={parentPath}
+            sx={{
+                p:.5,
+                color:'#000',
+                '&:hover':{
+                    bgcolor:'#ededed',
+                }
+            }}
+        >
+            <ArrowBackIosNewRounded 
+                sx={{scale:.875,}}
+            />
+        </IconButton>
+    );
+};
+
+const Account = () => {
+    const navigate = useNavigate();
+    const isMobile = useMediaQuery('(max-width:991px)')
+    const {user, userImpl, logout} = useUserAuthState();
+
+    // const handleVerify = () => {
+    //     sendEmailVerification(user).then(res => {
+    //         alert('New email verification has been sent. Continue with link and verify email in order to use your account. Close this when you have completed verification.');
+    //         window.location.reload();
+    //     })
+    // }
+
+    const Logout = () => {
+        logout();
+        window.location.href='/'
+    }
+
+    const PotentialBadge = ({ name, children }) => {
+        const unreadCount = userImpl?.notifications
+            ? userImpl.notifications.filter(notification => !notification.read).length
+            : 0;
+    
+        return (
+            name === 'Notifications' && unreadCount > 0
+                ? 
+                <Badge 
+                    badgeContent={unreadCount} 
+                    color="info"
+                    max={99}
+                >
+                    {children}
+                </Badge>
+                : children
+        );
+    };
+
+    const [active, setActive] = useState(false);
+    useEffect(() => {
+        setActive(window.location?.pathname !== '/account')
+    }, [window.location?.pathname])
+
+    return (
+        <Container
+            sx={{
+                px:active?0:2,
+                display:'flex',
+                justifyContent:'center',
+                minHeight:'inherit',
+            }}
+        >
+            <Box
+                sx={{
+                    gap:2,
+                    py:{xs:4,lg:6},
+                    pr:active?4:'unset',
+                    width:'100%',
+                    display:{xs:active? 'none' : 'flex',lg:'flex'},
+                    flexDirection:'column',
+                    borderRight:active?'1px solid #ededed':'unset',
+                }}
+            >
+                <Box
+                    sx={{
+                        pl:.5,
+                        mb:4,
+                    }}
+                >
+                    <Typography
+                        sx={{
+                            color:'#000',
+                            fontWeight:600,
+                            fontSize:{xs:'1.75rem',lg:'2rem'}
+                        }}
+                    >
+                        Your Account
+                    </Typography>
+                    <Typography
+                        sx={{
+                            color:'#000',
+                            lineHeight:'30px',
+                            fontSize:{xs:'1rem',lg:'1.25rem'}
+                        }}
+                    >
+                        <span style={{fontWeight:500}}>Hello, {user?.displayName?.split(' ')[0]}! </span>
+                        ({user?.email})
+                    </Typography>
+                    <Box
+                        sx={{
+                            mt:1,
+                            userSelect:'none',
+                            color:colors.info.main,
+                            fontSize:{xs:'.875rem',lg:'1rem'}
+                        }}
+                    >
+                        <span>Edit Profile</span> · <span component={Link} to={`/profile/${user?.uid}`}>Go to Profile</span>
+                    </Box>
+                </Box>
+
+                {account_web_routes.map((rt, idx) => (
+                    <Box
+                        component={Link}
+                        to={rt.url}
+                        sx={{
+                            py:{xs:2,lg:4},
+                            pr:{xs:2,lg:4},
+                            pl:4,
+                            gap:4,
+                            width:'100%',
+                            borderRadius:2,
+                            display:'flex',
+                            alignItems:'center',
+                            cursor:'pointer',
+                            boxShadow:'0 6px 12px rgba(0,0,0,0.1)',
+                            '&:hover':{
+                                bgcolor:'rgba(0,0,0,.05)',
+                            },
+                            transition:'all .2s ease-in'
+                        }}
+                    >
+                        <Icon
+                            sx={{
+                                color:'#000',
+                                scale:{xs:1.25,lg:1.5}
+                            }}
+                        >
+                            <rt.icon />
+                        </Icon>
+                        <Box
+                            sx={{
+                            }}
+                        >
+                            <Typography
+                                sx={{
+                                    color:'#000',
+                                    fontWeight:500,
+                                    fontSize:{xs:'1rem',lg:'1.25rem'},
+                                }}
+                            >
+                                {rt.name}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    color:'#737373',
+                                    fontWeight:450,
+                                    fontSize:{xs:'.75rem',lg:'1rem'},
+                                }}
+                            >
+                                {rt.description}
+                            </Typography>
+                        </Box>
+                        <Icon
+                            sx={{
+                                ml:'auto',
+                                color:'#ccc',
+                                scale:{xs:1,lg:1.25}
+                            }}
+                        >
+                            <ArrowForwardIosRounded />
+                        </Icon>
+                    </Box>
+                ))}
+            </Box>
+            
+            <Box
+                sx={{
+                    width:'100%',
+                    overflow:'hidden',
+                    textOverflow:'ellipsis',
+                    display:active ? 'flex' : 'none',
+                    flexDirection:'column',
+                    borderRight:'1px solid #ededed',
+                }}
+            >
+                <Box
+                    sx={{
+                        py:2,
+                        px:1,
+                        width:'100%',
+                        gap:1,
+                        display:'flex',
+                        height:'fit-content',
+                        alignItems:'center',
+                        borderBottom:'1px solid #ededed'
+                    }}
+                >
+                    <ParentLink />
+                    <Typography
+                        sx={{
+                            color:'#000',
+                            fontWeight:550,
+                            fontSize:{xs:'1.1rem',lg:'1.25rem'},
+                        }}
+                    >
+                        {account_web_routes.find((rt) => rt.url === window.location?.pathname)?.name ||  account_web_subroutes.find((sbrt) => sbrt.url === window.location?.pathname)?.name || 'Account Page'}
+                    </Typography>
+                </Box>
+                {(() => {
+                    const Component =
+                    account_web_routes.find((rt) => rt.url === window.location?.pathname)
+                        ?.component ||
+                    account_web_subroutes.find((sbrt) => sbrt.url === window.location?.pathname)
+                        ?.component;
+                    if (Component) {
+                        return (
+                            <AnimatePresence mode='wait'>
+                                <motion.div
+                                    key={window.location?.pathname}
+                                    initial="hidden"
+                                    animate={active ? "visible" : "hidden"}
+                                    exit="exit"
+                                    variants={isMobile ? swipeVariants : []}
+                                    style={{ width: "100%" }}
+                                >
+                                    <Component />
+                                </motion.div>
+                            </AnimatePresence>
+                        );
+                    }
+                })()}
+            </Box>
+        </Container>
+    )
+}
+
+export default Account;

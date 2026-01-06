@@ -1,0 +1,134 @@
+/* =====================
+   FullCalendar Container
+   ===================== */
+   .fc {
+  }
+
+  .fc-time {
+    display: none !important;
+  }
+
+  .fc-event-end   .fc-event-time{
+  
+    display: none;
+
+}
+  
+  /* =====================
+     Calendar Header
+     ===================== */
+  .fc-header-toolbar {
+    /* Affects the toolbar at the top of the calendar (prev/next buttons, today button, title) */
+  }
+  
+  .fc-toolbar-title {
+    font-weight: 450 !important;
+  }
+
+  
+  .fc-button-primary {
+    /* Affects the primary buttons (e.g., prev, next, today) */
+    background-color:#fff !important;
+    color:#000 !important;
+  }
+  .fc-prev-button {
+    border-radius: 32px !important;
+  }
+  
+  .fc-next-button {
+    border-radius: 32px !important;
+  }
+  .fc-button-group {
+    gap:8px;
+  }
+  
+  /* =====================
+     Calendar Days & Cells
+     ===================== */
+  .fc-day {
+    color:#737373 !important;
+  }
+  
+  .fc-day-number {
+    color:#737373 !important;
+  }
+
+  .fc-daygrid-day-number {
+    color: #737373 !important; /* Darker date numbers */
+  }
+  
+  .fc-day-today {
+    background-color: rgba(46, 137, 255, 0.25) !important;
+    border: 2px solid rgba(46, 137, 255, 0.5) !important;
+  }
+  
+  .fc-day-header {
+    /* Affects the header row (weekdays - Mon, Tue, etc.) */
+  }
+  
+  .fc-day-grid {
+    /* Controls the grid layout of the calendar */
+  }
+  
+  /* =====================
+     Events
+     ===================== */
+  .fc-event {
+    /* Controls the appearance of individual events in the calendar */
+  }
+  
+  .fc-event-title {
+    /* Affects the title text of an event */
+  }
+  
+  .fc-event-time {
+    /* Controls the event time display (if applicable) */
+  }
+  
+  .fc-event:hover {
+    cursor: pointer;
+  }
+  
+  .fc-event-selected {
+    /* Affects selected events */
+  }
+  
+  /* =====================
+     Calendar View Styles
+     ===================== */
+  .fc-day-grid-event {
+  }
+  
+  .fc-week-view .fc-day {
+    /* Customizes the day cells specifically in the week view */
+  }
+  
+  .fc-month-view .fc-day {
+  }
+  
+  /* =====================
+     Theme Styles (if applicable)
+     ===================== */
+  .fc-theme-standard {
+    /* Default FullCalendar theme styles */
+  }
+  
+  .fc-theme-bootstrap3, .fc-theme-bootstrap4 {
+    /* Affects FullCalendar when using the Bootstrap theme */
+  }
+  
+  /* =====================
+     Miscellaneous Styles
+     ===================== */
+  .fc-scrollgrid {
+    /* Customizes the scrollable grid if you're using scrollable views */
+  }
+  
+  .fc-event-dot {
+    /* Affects the event "dot" (tiny dot shown next to events) */
+  }
+  
+  .fc-ltr, .fc-rtl {
+    /* Controls layout direction (Left-to-Right or Right-to-Left) */
+  }
+  
